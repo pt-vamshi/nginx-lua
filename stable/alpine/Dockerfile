@@ -1,8 +1,16 @@
 FROM alpine:3.4
 
-MAINTAINER NGINX Docker Maintainers "docker-maint@nginx.com"
+MAINTAINER Wang Shaobo <fireshooter@163.com>
+
+ENV LANG en_US.UTF-8
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ENV NGINX_VERSION 1.10.2
+ENV NGX_DEVEL_KIT_VERSION 0.3.0
+ENV LUA_NGINX_MODULE_VERSION 0.10.7
+
+# Install LUAJIT
+RUN apk add --no-cache luajit
 
 RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& CONFIG="\
@@ -47,6 +55,9 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		--with-file-aio \
 		--with-http_v2_module \
 		--with-ipv6 \
+		--with-ld-opt="-Wl,-rpath,/usr/lib" \
+	  --add-module=/tmp/ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
+	  --add-module=/tmp/lua-nginx-module-${LUA_NGINX_MODULE_VERSION} \
 	" \
 	&& addgroup -S nginx \
 	&& adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
@@ -64,6 +75,13 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		gd-dev \
 		geoip-dev \
 		perl-dev \
+		luajit-dev \
+	&& export LUAJIT_LIB=/usr/lib \
+	&& export LUAJIT_INC=/usr/include/luajit-2.0 \
+	&& curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz -o /tmp/ndk.tar.gz \
+	&& tar -xvf /tmp/ndk.tar.gz -C /tmp \
+	&& curl -fSL https://github.com/openresty/lua-nginx-module/archive/v${LUA_NGINX_MODULE_VERSION}.tar.gz -o /tmp/lua-nginx.tar.gz \
+	&& tar -xvf /tmp/lua-nginx.tar.gz -C /tmp \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
 	&& export GNUPGHOME="$(mktemp -d)" \
@@ -98,6 +116,10 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& strip /usr/sbin/nginx* \
 	&& strip /usr/lib/nginx/modules/*.so \
 	&& rm -rf /usr/src/nginx-$NGINX_VERSION \
+	&& rm -f /tmp/ndk.tar.gz \
+	&& rm -f /tmp/lua-nginx.tar.gz \
+	&& rm -f /tmp/ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
+	&& rm -f /tmp/lua-nginx-module-${LUA_NGINX_MODULE_VERSION} \
 	\
 	# Bring in gettext so we can get `envsubst`, then throw
 	# the rest away. To do this, we need to install `gettext`

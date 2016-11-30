@@ -3,7 +3,7 @@ FROM alpine:3.4
 MAINTAINER Wang Shaobo <fireshooter@163.com>
 
 ENV LANG en_US.UTF-8
-#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ENV NGINX_VERSION 1.10.2
 ENV NGX_DEVEL_KIT_VERSION 0.3.0
@@ -118,8 +118,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& rm -rf /usr/src/nginx-$NGINX_VERSION \
 	&& rm -f /tmp/ndk.tar.gz \
 	&& rm -f /tmp/lua-nginx.tar.gz \
-	&& rm -f /tmp/ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
-	&& rm -f /tmp/lua-nginx-module-${LUA_NGINX_MODULE_VERSION} \
+	&& rm -rf /tmp/ngx_devel_kit-${NGX_DEVEL_KIT_VERSION} \
+	&& rm -rf /tmp/lua-nginx-module-${LUA_NGINX_MODULE_VERSION} \
 	\
 	# Bring in gettext so we can get `envsubst`, then throw
 	# the rest away. To do this, we need to install `gettext`

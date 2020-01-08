@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file apline/Dockerfile --tag my-image-name:$(date +%s)
+    - name: Push to github package Registry
+      uses: machine-learning-apps/gpr-docker-publish@v1.3
+    

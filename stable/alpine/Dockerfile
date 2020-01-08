@@ -5,11 +5,9 @@ MAINTAINER Wang Shaobo <fireshooter@163.com>
 ENV LANG en_US.UTF-8
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-RUN apk update
-
 ENV NGINX_VERSION 1.10.2
-ENV NGX_DEVEL_KIT_VERSION 0.3.0
-ENV LUA_NGINX_MODULE_VERSION 0.10.15
+ENV NGX_DEVEL_KIT_VERSION 0.3.1
+ENV LUA_NGINX_MODULE_VERSION 0.10.14
 
 # Install LUAJIT
 RUN apk add --no-cache luajit
@@ -80,7 +78,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		luajit-dev \
 	&& export LUAJIT_LIB=/usr/lib \
 	&& export LUAJIT_INC=/usr/include/luajit-2.1 \
-	&& curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz -o /tmp/ndk.tar.gz \
+	&& curl -fSL https://github.com/simpl/ngx_devel_kit/archive/v${NGX_DEVEL_KIT_VERSION}.tar.gz -o /tmp/ndk.tar.gz \
 	&& tar -xvf /tmp/ndk.tar.gz -C /tmp \
 	&& curl -fSL https://github.com/openresty/lua-nginx-module/archive/v${LUA_NGINX_MODULE_VERSION}.tar.gz -o /tmp/lua-nginx.tar.gz \
 	&& tar -xvf /tmp/lua-nginx.tar.gz -C /tmp \

@@ -10,8 +10,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
-      run: docker build . --file apline/Dockerfile --tag my-image-name:$(date +%s)
-    - name: Push to github package Registry
-      uses: machine-learning-apps/gpr-docker-publish@v1.3
+    - name: Push to Github Package Registry
+      uses: machine-learning-apps/gpr-docker-publish@master
+      id: docker
+      with:
+        IMAGE_NAME: 'main'
+        TAG: 'latest'
+        DOCKERFILE_PATH: 'stable/alpine/Dockerfile'
+        BUILD_CONTEXT: ''
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     

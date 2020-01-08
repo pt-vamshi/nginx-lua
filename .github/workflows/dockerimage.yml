@@ -17,7 +17,7 @@ jobs:
         IMAGE_NAME: 'main'
         TAG: 'latest'
         DOCKERFILE_PATH: 'stable/alpine/Dockerfile'
-        BUILD_CONTEXT: ''
+        BUILD_CONTEXT: '.'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     

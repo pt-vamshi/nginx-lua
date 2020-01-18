@@ -15,5 +15,5 @@ Only 2 modules is add:
 
 ## Usage
  ```
- docker run -d -p 80:80 -p 443:443 firesh/ngingx-lua
+ docker run -d -p 80:80 -p 443:443 firesh/nginx-lua
  ```

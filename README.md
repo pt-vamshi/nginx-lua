@@ -17,3 +17,6 @@ Only 2 modules is add:
  ```
  docker run -d -p 80:80 -p 443:443 firesh/nginx-lua
  ```
+## How
+Please view lua script in nginx conf:
+https://github.com/firesh/nginx-lua/blob/master/stable/alpine/nginx.vh.default.conf#L14

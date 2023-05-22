@@ -19,5 +19,5 @@ jobs:
         echo "[DEBUG] Building..."
         docker build -t nginx-lua:alpine-test .
         echo "[DEBUG] Testing..."
-        docker run  --entrypoint nginx nginx-lua:alpine-test -version | tee nginx.version
+        echo $(docker run  --entrypoint nginx nginx-lua:alpine-test -version 2>&1 | tee nginx.version
         if [[ $(cat nginx.version | grep "nginx/1.24.0" | wc -l) -le 0 ]]; then exit 1; fi

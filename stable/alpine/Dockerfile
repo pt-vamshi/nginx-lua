@@ -1,18 +1,17 @@
-FROM alpine:3.8
+FROM alpine:3.18.0
 
 MAINTAINER Wang Shaobo <fireshooter@163.com>
 
 ENV LANG en_US.UTF-8
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-ENV NGINX_VERSION 1.10.2
-ENV NGX_DEVEL_KIT_VERSION 0.3.1
-ENV LUA_NGINX_MODULE_VERSION 0.10.14
+ENV NGINX_VERSION 1.24.0
+ENV NGX_DEVEL_KIT_VERSION 0.3.2
+ENV LUA_NGINX_MODULE_VERSION 0.10.24
 
-# Install LUAJIT
-RUN apk add --no-cache luajit
+# Install LUAJIT and LUARestyCore
+RUN apk update && apk add --no-cache luajit lua-resty-core
 
-RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
+RUN GPG_KEYS=13C82A63B603576156E30A4EA0EA981B66B0D967 \
 	&& CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
@@ -85,7 +84,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
 	&& curl -fSL http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEYS" \
+	&& gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "$GPG_KEYS" \
 	&& gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
 	&& rm -r "$GNUPGHOME" nginx.tar.gz.asc \
 	&& mkdir -p /usr/src \

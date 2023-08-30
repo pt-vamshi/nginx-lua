@@ -3,7 +3,6 @@ FROM alpine:3.18.3
 MAINTAINER Wang Shaobo <fireshooter@163.com>
 
 ENV LANG en_US.UTF-8
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ENV NGINX_VERSION 1.24.0
 ENV NGX_DEVEL_KIT_VERSION 0.3.2

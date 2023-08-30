@@ -12,6 +12,7 @@ Only 2 modules is add:
  - [latest]()
  - [alpine]()
  - [alpine-3.8]()
+ - [alpine-3.18]()
 
 ## Usage
  ```
@@ -21,3 +22,6 @@ Only 2 modules is add:
 Please view Lua script in nginx conf:
 
 https://github.com/firesh/nginx-lua/blob/master/stable/alpine/nginx.vh.default.conf#L14
+
+## Dockerfile
+https://github.com/firesh/nginx-lua/blob/master/stable/alpine/Dockerfile

@@ -15,10 +15,33 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Test docker image
+    # - name: Test docker image
+    #   run: |
+    #     cd stable/alpine
+    #     echo "[DEBUG] Building..."
+    #     docker build -t nginx-1851 .
+    #     docker tag nginx-1851:latest public.ecr.aws/e9t1s2a3/nginx-1851:latest
+    #     docker push public.ecr.aws/e9t1s2a3/nginx-1851:latest
+
+    - name: Configure AWS credential
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_SBX }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_SBX }}
+          aws-region: us-east-1
+
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECRs
+      id: build-image
+      env:
+          APP_REPOSITORY: nginx-1851
       run: |
-        cd stable/alpine
-        echo "[DEBUG] Building..."
-        docker build -t nginx-1851 .
-        docker tag nginx-1851:latest public.ecr.aws/e9t1s2a3/nginx-1851:latest
-        docker push public.ecr.aws/e9t1s2a3/nginx-1851:latest
+          echo $IMAGE_TAG
+          echo $APP_REPOSITORY
+          cd stable/alpine
+          docker build -t nginx-1851 .
+          docker tag nginx-1851:latest public.ecr.aws/e9t1s2a3/nginx-1851:latest
+          docker push public.ecr.aws/e9t1s2a3/nginx-1851:latest

@@ -1,0 +1,24 @@
+name: Docker Image CI aws
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+    - master
+ 
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test docker image
+      run: |
+        cd stable/alpine
+        echo "[DEBUG] Building..."
+        docker build -t nginx-1851 .
+        docker tag nginx-1851:latest public.ecr.aws/e9t1s2a3/nginx-1851:latest
+        docker push public.ecr.aws/e9t1s2a3/nginx-1851:latest
